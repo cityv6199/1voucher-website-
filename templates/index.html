@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim Your Voucher</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Claim Your Voucher</h1>
+        <form id="voucherForm">
+            <label for="voucherNumber">Voucher Number:</label>
+            <input type="text" id="voucherNumber" name="voucherNumber" placeholder="Enter voucher number" required>
+            <button type="submit">Claim Voucher</button>
+        </form>
+        <div id="responseMessage"></div>
+    </div>
+    <script>
+        document.getElementById('voucherForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const voucherNumber = document.getElementById('voucherNumber').value;
+            const response = await fetch('/claim', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ voucherNumber })
+            });
+            const result = await response.json();
+
+            const messageDiv = document.getElementById('responseMessage');
+            messageDiv.textContent = result.message;
+            messageDiv.style.color = result.status === 'success' ? 'green' : 'red';
+        });
+    </script>
+</body>
+</html>
